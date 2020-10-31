@@ -90,7 +90,19 @@
   .userIcon {
     cursor: pointer;
   }
-  
+  .branch,
+  .college {
+  border: none;
+  outline: 0 !important;
+  padding: 5px;
+  background-color: #aa66cc;
+  color: white;
+}
+.branch option,
+.college option {
+  background-color: white;
+  color: black;
+}
   .mainCard {
     width: 1350px;
     margin: 0 auto;
@@ -366,7 +378,6 @@
     }
   }
 
-  
 
   .inputFields {
     margin-bottom: 25px;

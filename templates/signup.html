@@ -67,8 +67,25 @@
                     </div>
 
                     <div class="inputfields">
-                        <p>What are you?</p>
+                        <p>Who are you?</p>
                         {{ form.position }}
+                    </div>
+
+                    <div class="username inputFields">
+                        <p>College</p>
+                        {{ form.college_name(class = 'form-control', 
+                                  placeholder = 'College Name',
+                                  autocomplete = 'off',
+                                  autofocus = true) }}
+
+                                      {% for error in form.college_name.errors %}
+                                          <h6 class="text-danger">{{ error }}</h6>
+                                      {% endfor %}
+                    </div>
+
+                    <div class="inputfields">
+                        <p>Select your branch</p>
+                        {{ form.branch }}
                     </div>
 
                     <div class="password inputFields">

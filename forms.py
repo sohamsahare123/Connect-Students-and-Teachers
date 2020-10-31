@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, SubmitField, RadioField
+from wtforms import StringField, PasswordField, SubmitField, RadioField, SelectField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import InputRequired, Length, EqualTo, ValidationError
 
@@ -41,6 +41,9 @@ class SignUp(FlaskForm): # Signup
     password = PasswordField("password", validators = [InputRequired("Password Required"), Length(min = 5, max = 20, message = "Password must be between 5 to 20 characters")])
     confirm_password = PasswordField("confirm_password", validators = [InputRequired("Password Required"), EqualTo("password", message = "Password must match")])
     position = RadioField("position", choices = [("teacher", "Teacher"), ("student", "Student")])
+    branch = SelectField("branch", choices = [('biomedical', 'Biomedical'),('computer engineering','Computer Engineering'),('electrical', 'Electrical'), ('electronics', 'Electronics'), ('electronics and telecommunication', 'Electronics and Telecommunication'),('information technology','Information Technology'),('other','Other')])
+    
+    college_name = StringField("college_name", validators = [InputRequired("College Name Required")])
 
     submit = SubmitField("Submit")
 
@@ -63,3 +66,10 @@ class AddProjectPost(FlaskForm):
     link = StringField("link", validators = [InputRequired("Link Required")])
 
     submit = SubmitField('Add')
+
+# class AddProjectComments(FlaskForm):
+
+#     comment = StringField("comment", validators = [InputRequired("Comment Required")])
+#     project_id = StringField("project_id", validators = [InputRequired("project_id Required")])
+
+#     submit = SubmitField('Add')

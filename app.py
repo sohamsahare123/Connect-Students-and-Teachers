@@ -54,9 +54,12 @@ def signup():
         password = signup.password.data
         position = signup.position.data
 
+        branch = signup.branch.data
+        college_name = signup.college_name.data
+
         hashed_password = pbkdf2_sha256.hash(password)
 
-        user = User(email = email, username = username, password = hashed_password, position = position)
+        user = User(email = email, username = username, password = hashed_password, position = position, branch = branch, college_name = college_name)
         db.session.add(user)
         db.session.commit() 
 
@@ -95,8 +98,9 @@ def logout():
     logout_user()
     flash("Logged out successfully!!", 'success')
 
-    return "LOGGED OUT"
-    return render_template("main.html")
+    login = LogIn()
+
+    return render_template("login.html", form = login)
 
 @app.route("/projects", methods = ['GET', 'POST'])
 #@login_required
@@ -110,14 +114,17 @@ def projects():
     status = "1"
 
     posts = AddProject.query.all()
+    comments = ProjectComments.query.all()
+
+    # add_comment = AddProjectComments() ## COMMENT FORM
 
     if not current_user.is_authenticated:
 
         flash("Please Login!!", 'danger')
         status = "0"
-        return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts)
+        return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
 
-    return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts)
+    return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts, comments = comments)
 
 @app.route("/addproject", methods = ["POST"])
 def addproject():
@@ -150,7 +157,19 @@ def addproject():
         db.session.add(post)
         db.session.commit() 
 
-        return "{} {} {} {}".format(title, description, link, date_time)
+        # break
+
+        add_posts = AddProjectPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        posts = AddProject.query.all()
+        comments = ProjectComments.query.all()
+
+        return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts, comments = comments)
 
 @app.route("/forgotpassword", methods = ["GET", "POST"])
 def forgotpassword():
@@ -191,6 +210,63 @@ def forgotpassword():
             return render_template("forgotpassword.html", form = forgot_password)
 
     return render_template("forgotpassword.html", form = forgot_password)
+
+@app.route("/filter", methods = ["GET, POST"])
+def filter():
+
+    return "filter"
+
+@app.route("/academics", methods = ["GET", "POST"])
+def academics():
+    
+    return "academics"
+
+@app.route("/qna", methods = ["GET", "POST"])
+def qna():
+    
+    return "qna"
+
+@app.route("/blog", methods = ["GET", "POST"])
+def blog():
+    
+    return "blog"
+
+@app.route("/ideas", methods = ["GET", "POST"])
+def ideas():
+
+    return "ideas"
+
+@app.route("/addprojectcomments", methods = ["GET", "POST"])
+def addprojectcomments():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        comment = request.form["comment"]
+        project_id = request.form["project"]
+
+        now = datetime.now()
+
+        date = str(now.strftime("%d/%m/%Y"))
+        time = str(now.strftime("%H:%M"))
+
+        date_time = "{} {}".format(date, time)
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        username = user.username
+
+        comm = ProjectComments(comment = comment, date_time = date_time, userid = userid, username = username, projectid = project_id)
+        db.session.add(comm)
+        db.session.commit() 
+
+        return "DONE"
+
+    return "addprojectcomments"
 
 if __name__ == "__main__":
 

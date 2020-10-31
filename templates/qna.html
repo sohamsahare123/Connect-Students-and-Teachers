@@ -15,7 +15,7 @@
     <!-- <link rel="stylesheet" href="styleI.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleI.css') }}">
 
-    <title>Projects</title>
+    <title>QnA</title>
 </head>
 <body>
     
@@ -387,11 +387,7 @@
                               <div class="comments-view">
 
                                 {% for comment in comments %}
-
-                                  project id: {{ comment.projectid }}
-                                  post id: {{ post.id }}
-                                  
-                                  {% if comment.projectid == 'post.id' %}
+                                  {% if comment.projectid == post.id %}
                                 <p class="note note-primary">
                                   <strong>{{ comment.username }} : </strong> {{ comment.comment }}
                                 </p>

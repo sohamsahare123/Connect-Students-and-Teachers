@@ -18,12 +18,12 @@
 </head>
 <body>
     
-    
     <div class="hiddenNav">
-        <a href=""><p>Home</p></a>
+        <a href=""><p>Projects</p></a>
         <a href=""><p>Academics</p></a>
         <a href=""><p>Ideas</p></a>
         <a href=""><p>Blog</p></a>
+        <a href=""><p>QnA</p></a>
     </div>
     <nav>
         <div class="navbar">
@@ -44,7 +44,7 @@
                     <a class="dropdown-item" href="#">Username</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Profile</a>
-                    <a class="dropdown-item" href="#">Logout</a>
+                    <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                 </div>
 
             </div>
@@ -69,10 +69,11 @@
             <div class="nav">
                 <div class="links">
                     <a href=""><h5>EBN</h5></a>
-                    <a href=""><p>Home</p></a>
+                    <a href=""><p>Projects</p></a>
                     <a href=""><p>Academics</p></a>
                     <a href=""><p>Ideas</p></a>
                     <a href=""><p>Blog</p></a>
+                    <a href=""><p>QnA</p></a>
                 </div>
                 
                 <div class="dropdown">
@@ -90,7 +91,7 @@
                         <div class="dropdown-divider"></div>
                         
                       <a class="dropdown-item" href="#">Profile</a>
-                      <a class="dropdown-item" href="#">Logout</a>
+                      <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                     </div>
                 </div>
 
