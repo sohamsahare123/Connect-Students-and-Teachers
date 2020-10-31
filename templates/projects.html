@@ -387,15 +387,10 @@
                               <div class="comments-view">
 
                                 {% for comment in comments %}
-
-                                  project id: {{ comment.projectid }}
-                                  post id: {{ post.id }}
-                                  
-                                  {% if comment.projectid == 'post.id' %}
+                                
                                 <p class="note note-primary">
                                   <strong>{{ comment.username }} : </strong> {{ comment.comment }}
                                 </p>
-                                  {% endif %}
                                 {% endfor %}
                               </div>
                               <div class="comments-view">
