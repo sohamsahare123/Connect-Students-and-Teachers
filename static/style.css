@@ -1,0 +1,116 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  body {
+    background: #36D1DC; 
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);  
+    background: linear-gradient(to right, #5B86E5, #36D1DC); 
+
+  }
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  .content .card {
+    width: 540px;
+    padding: 65px;
+    border-radius: 15px;
+    box-shadow: none;
+  }
+  .content .card .title p {
+    color: rgb(175, 175, 175);
+    font-size: 18px;
+  }
+  
+  .content .card .title {
+    margin-bottom: 50px;
+  }
+  
+  .inputFields {
+    margin-bottom: 25px;
+  }
+  .inputFields p {  
+    margin: 0;
+  }
+  .inputFields input {
+    width: 100%;
+    border: none;
+    background-color: #f3f6f9;
+    outline: 0;
+    padding: 19.5px;
+    border-radius: 15px;
+  }
+  .inputFields input:focus {
+    background-color: #eaeff3;
+  }
+  .passHead {
+    display: flex;
+    justify-content: space-between;
+  }
+  .passHead a {
+    color: #5B86E5 !important;
+  }
+  /* foot start */
+  .loginBtn {
+    border: none;
+    background-color: #5B86E5;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    margin-bottom: 10px;
+  }
+  .loginBtn:hover {
+    background-color: #36D1DC;
+  }
+  
+  .loginBtn p {
+    margin: 0;
+    color: white !important;
+    font-family: "Poppins", sans-serif;
+  }
+  .foot p {
+    color: rgb(173, 173, 173);
+    font-size: 18px;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+  }
+  .foot a {
+    color: #5B86E5;
+    font-family: "Poppins", sans-serif;
+  }
+  .foot a:hover {
+    color: #36D1DC;
+  }
+  .creatAcc {
+    display: flex;
+  }
+  /* foot end */
+  
+  @media screen and (max-width: 1200px) {
+    .content .card {
+      width: 450px;
+    }
+  }
+  @media screen and (max-width: 550px) {
+    .content .card {
+      width: 90%;
+    }
+  }
+  @media screen and (max-width: 440px) {
+    .content .card {
+      padding: 35px;
+    }
+    .creatAcc {
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      height: 120vh;
+    }
+  }
+

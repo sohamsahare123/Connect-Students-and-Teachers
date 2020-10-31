@@ -1,0 +1,394 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background: #36D1DC; 
+    background: -webkit-linear-gradient(to right, #5B86E5, #36D1DC);  
+    background: linear-gradient(to right, #5B86E5, #36D1DC); 
+  }
+  
+  .hiddenNav {
+    background-color: white;
+    position: absolute;
+    z-index: 100;
+    width: 280px;
+    height: 100vh;
+    padding: 30px;
+    left: -280px;
+    transition: all 0.5s;
+  }
+  .display {
+    left: 0;
+  }
+  
+  nav {
+    display: none;
+    background-color: white;
+  }
+  /* hiddeNav start */
+  .hiddenNav a {
+    color: rgb(41, 41, 41);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .hiddenNav a:hover {
+    color: blueviolet;
+  }
+  .ham:hover {
+    color: blueviolet;
+    cursor: pointer;
+  }
+  .navbar .user i {
+    font-size: 30px;
+    color: blueviolet;
+  }
+  /* hiddeNav end */
+  
+  /* cards start */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px;
+  }
+  .nav .links {
+    display: flex;
+    align-items: center;
+  }
+  .nav .links a {
+    text-decoration: none;
+  }
+  .nav .links a:nth-child(2) {
+    margin-left: 20px;
+  }
+  
+  .nav .links p {
+    margin: 0;
+    margin-left: 30px;
+    font-size: 14px;
+    color: grey;
+    transition: all 0.4s;
+    font-weight: 500;
+  }
+  .nav .links p:hover {
+    color: black;
+  }
+  
+  .nav .links h5 {
+    margin: 0;
+    color: blueviolet;
+    font-weight: bolder;
+  }
+  .nav .user i {
+    font-size: 30px;
+    color: blueviolet;
+  }
+  .userIconNav,
+  .userIcon {
+    cursor: pointer;
+  }
+  
+  .mainCard {
+    width: 1350px;
+    margin: 0 auto;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    padding-top: 20px;
+  }
+  .content {
+    padding: 35px;
+    background-color: #f8fafb;
+    border-radius: 40px;
+  }
+  
+  .cards .card {
+    padding: 30px;
+    box-shadow: none;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  /* userProfile start */
+  .userProfileDisplay {
+    display: initial !important;
+  }
+  .userProfile {
+    width: 350px;
+    background-color: white;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    top: 0;
+    box-shadow: 5px 10px 10px 5px #e9e9e9;
+    display: none;
+  }
+  .name {
+    padding: 30px 0;
+    text-align: center;
+    border-bottom: 1px solid rgb(228, 228, 228);
+  }
+  .name p {
+    font-size: 18px !important;
+    font-weight: 500;
+  }
+  .logoutProfile {
+    display: flex;
+  }
+  .userProfileIcon {
+    font-size: 24px;
+    color: rgb(150, 80, 252);
+  }
+  .logout,
+  .profile {
+    flex: 0.5;
+    text-align: center;
+    padding: 30px 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .logout:hover,
+  .profile:hover {
+    background-color: #f8fafb;
+  }
+  .profile {
+    border-left: 1px solid rgb(228, 228, 228);
+  }
+  .logout p,
+  .profile p,
+  .name p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 15px;
+  }
+  /* userProfile end */
+  .cards .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .cards .card .title h1 {
+    font-size: 25px;
+    font-weight: 500;
+    color: rgb(63, 66, 84);
+  }
+  .cards .card .title p {
+    color: rgb(181, 181, 195);
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.5s;
+  }
+  .cards .card .title p:hover {
+    color: blueviolet;
+  }
+  
+  .editDelete {
+    display: flex;
+  }
+  .editBtn {
+    border: none;
+    background-color: rgb(238, 229, 255);
+    font-size: 14px;
+    color: rgb(150, 80, 252);
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 600;
+    outline: 0 !important;
+  }
+  .deleteBtn {
+    border: none;
+    background-color: rgb(150, 80, 252);
+    font-size: 14px;
+    color: white;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 600;
+    outline: 0 !important;
+    margin-left: 10px;
+  }
+  .userDetails {
+    background: none;
+    padding: 0;
+    border: none;
+    outline: 0 !important;
+  }
+  .userDetails p {
+    margin: 0;
+  }
+  
+  .para {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(141, 141, 141);
+    margin-top: 10px;
+  }
+  modal-body-view p {
+    font-size: 15px;
+  }
+  .comments {
+    display: flex;
+    align-items: center;
+    color: grey;
+    justify-content: space-between;
+    flex-wrap:wrap;
+  }
+  .comments .view {
+    margin-left: 15px;
+  }
+  .comments .view p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: rgb(63, 66, 84);
+  }
+  .comments .view button {
+    outline: 0 !important;
+    border: none;
+    background: none;
+  }
+  
+  .comments .view button p {
+    color: blueviolet;
+    cursor: pointer;
+  }
+  
+  footer {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+  footer .copyright {
+    font-size: 13px;
+  }
+  footer .copyright a {
+    color: black;
+  }
+  footer .copyright a:last-of-type {
+    margin-left: 10px;
+  }
+  
+  footer .copyright a:hover {
+    color: blueviolet;
+  }
+  
+  footer .links {
+    display: flex;
+  }
+  footer .links a {
+    color: grey;
+    font-size: 13px;
+  }
+  footer .links a p {
+    margin: 5px;
+  }
+  
+  footer .links a:hover {
+    color: blueviolet;
+  }
+  
+  /* cards end */
+  
+  @media screen and (max-width: 1400px) {
+    .mainCard {
+      width: 1150px;
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .mainCard {
+      width: 990px;
+    }
+  }
+  @media screen and (max-width: 1030px) {
+    .mainCard {
+      width: 95%;
+    }
+  }
+  @media screen and (max-width: 990px) {
+    .nav {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 990px) {
+    nav {
+      display: inherit;
+    }
+    .content {
+      padding: 15px;
+    }
+    .userProfile {
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  @media screen and (max-width: 407px) {
+    .comments{
+      justify-content: center;
+    }
+  }
+
+  @media screen and (max-width: 370px) {
+    footer {
+      display: flex;
+      flex-direction: column-reverse;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .userProfile {
+      width: 90%;
+    }
+  }
+  
+  @media screen and (max-width: 345px) {
+    .cards .head {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  @media screen and (max-width: 280px) {
+    .editDelete {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .deleteBtn {
+      margin: 0;
+    }
+  }
+
+  
+
+  .inputFields {
+    margin-bottom: 25px;
+  }
+  .inputFields p {  
+    margin: 0;
+  }
+  .inputFields input {
+    width: 100%;
+    border: none;
+    background-color: #f3f6f9;
+    outline: 0;
+    padding: 19.5px;
+    border-radius: 15px;
+  }
+  .inputFields input:focus {
+    background-color: #eaeff3;
+  }
+  .passHead {
+    display: flex;
+    justify-content: space-between;
+  }
+  .passHead a {
+    color: #5B86E5 !important;
+  }
