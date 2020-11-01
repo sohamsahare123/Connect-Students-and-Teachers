@@ -7,7 +7,7 @@ class User(UserMixin, db.Model):
 
     __tablename__ = 'users'
 
-    '''CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(60) UNIQUE NOT NULL, username VARCHAR(20) UNIQUE NOT NULL, password TEXT NOT NULL, position TEXT NOT NULL, branch TEXT NOT NULL, college_name TEXT NOT NULL);'''
+    '''CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(60) UNIQUE NOT NULL, username VARCHAR(20) UNIQUE NOT NULL, password TEXT NOT NULL, position TEXT NOT NULL, branch TEXT NOT NULL, college_name TEXT NOT NULL, linkedin TEXT, github TEXT);'''
 
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(60), unique = True, nullable = False)
@@ -16,6 +16,8 @@ class User(UserMixin, db.Model):
     position = db.Column(db.String(), nullable = False)
     branch = db.Column(db.String(), nullable = False)
     college_name = db.Column(db.String(), nullable = False)
+    linkedin = db.Column(db.String(), nullable = True)
+    github = db.Column(db.String(), nullable = True)
 
 class Collab(UserMixin, db.Model):
 

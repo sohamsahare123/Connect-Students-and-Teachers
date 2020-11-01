@@ -274,11 +274,16 @@
                             </div>
                             <div class="modal-body">
                               <p>Contact details</p>
+                              {% for i in users %}
+                            
+                              {% if i.username == post.username %}
                               <div class="links" style="display: flex; justify-content: space-around;">
-                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                  <a href=""><i class="fab fa-instagram-square"></i></a>
-                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
+                                  <a class="btn btn-primary" href="{{ i.linkedin }}"><i class="fab fa-linkedin-in"></i></a>
+                                  <a class="btn btn-primary" href="{{ i.github }}"><i class="fab fa-github"></i></a>
+                                  <a class="btn btn-primary" href="mailto:{{ i.email }}"><i class="fas fa-envelope"></i></a>
                               </div>
+                              {% endif %}
+                              {% endfor %}
                             </div>
                             <div class="modal-footer">
                               <form action="/collab" method="POST">
@@ -287,7 +292,7 @@
                                 <input type="text" style="display: none;" name="followed_username" id="followed_username" value="{{ post.username }}">
                                 
                                 <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                                <button type="submit" class="btn btn-secondary">Ask for Collaboration</button>
+                                <button type="submit" class="btn btn-secondary">Connect</button>
                               </form>
                             </div>
                           </div>

@@ -40,7 +40,9 @@ def load_user(id):
 @app.route("/", methods = ['GET', 'POST'])
 def main():
 
-    return "Landing"
+    signup = SignUp()
+
+    return render_template("signup.html", form = signup)
 
 @app.route("/signup", methods = ['GET', 'POST'])
 def signup():
@@ -152,6 +154,11 @@ def logout():
 #@login_required
 def projects():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     add_posts = AddProjectPost()
 
     userid = current_user.get_id()
@@ -159,16 +166,12 @@ def projects():
     user_name = user.username
     status = "1"
 
+    users = User.query.all()
+
     posts = AddProject.query.all()
     comments = ProjectComments.query.all()
 
-    if not current_user.is_authenticated:
-
-        flash("Please Login!!", 'danger')
-        status = "0"
-        return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
-
-    return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+    return render_template("projects.html", users = users, username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
 
 ##### ADD PROJECTS  
 
@@ -256,6 +259,11 @@ def addprojectcomments():
 @app.route("/editpostproject", methods = ["GET", "POST"])
 def editpostproject():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         title = request.form["title"]
@@ -276,6 +284,11 @@ def editpostproject():
 @app.route("/deleteproject", methods = ["POST"])
 def deleteproject():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         projectid = request.form["projectid"]
@@ -295,6 +308,11 @@ def deleteproject():
 #@login_required
 def academics():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     add_posts = AddAcademicsPost()
 
     userid = current_user.get_id()
@@ -305,13 +323,9 @@ def academics():
     posts = AddAcademics.query.all()
     comments = AcademicComments.query.all()
 
-    if not current_user.is_authenticated:
+    users = User.query.all()
 
-        flash("Please Login!!", 'danger')
-        status = "0"
-        return render_template("academics.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
-
-    return render_template("academics.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+    return render_template("academics.html", users = users, username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
 
 ##### ADD PROJECTS  
 
@@ -399,6 +413,11 @@ def addacademiccomments():
 @app.route("/editpostacademic", methods = ["GET", "POST"])
 def editpostacademic():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         title = request.form["title"]
@@ -418,6 +437,11 @@ def editpostacademic():
 
 @app.route("/deleteacademic", methods = ["POST"])
 def deleteacademic():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
 
     if request.method == "POST":
 
@@ -439,6 +463,11 @@ def deleteacademic():
 #@login_required
 def ideas():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     add_posts = AddIdeasPost()
 
     userid = current_user.get_id()
@@ -449,13 +478,9 @@ def ideas():
     posts = AddIdeas.query.all()
     comments = IdeasComments.query.all()
 
-    if not current_user.is_authenticated:
+    users = User.query.all()
 
-        flash("Please Login!!", 'danger')
-        status = "0"
-        return render_template("ideas.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
-
-    return render_template("ideas.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+    return render_template("ideas.html", users = users, username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
 
 ##### ADD Ideas  
 
@@ -543,6 +568,11 @@ def addideacomments():
 @app.route("/editpostidea", methods = ["GET", "POST"])
 def editpostidea():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         title = request.form["title"]
@@ -563,6 +593,11 @@ def editpostidea():
 @app.route("/deleteidea", methods = ["POST"])
 def deleteidea():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         projectid = request.form["projectid"]
@@ -574,8 +609,13 @@ def deleteidea():
 
     return "edited"
 
-@app.route("/filter", methods = ["GET", "POST"])
-def filter():
+@app.route("/filterproject", methods = ["GET", "POST"])
+def filterproject():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
 
     if request.method == "POST":
 
@@ -608,16 +648,122 @@ def filter():
 
         add_posts = AddProjectPost()
 
+        users = User.query.all()
+
+
         # if not current_user.is_authenticated:
 
         #     flash("Please Login!!", 'danger')
         #     status = "0"
         #     return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
 
-        return render_template("filtered.html", filtered = filtered, posts = posts[::-1], comments = comments, username = user_name, add_project_form = add_posts, status = status)
+        return render_template("filtered.html", users = users, filtered = filtered, posts = posts[::-1], comments = comments, username = user_name, add_project_form = add_posts, status = status)
+
+@app.route("/filteracademics", methods = ["GET", "POST"])
+def filteracademics():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        branch = request.form["branch"]
+        college_name = request.form["college_name"]
+
+        add_posts = AddAcademicsPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        if(branch and college_name):
+            filtered = User.query.filter_by(branch = branch, college_name = college_name).all()
+        elif(college_name):
+            filtered = User.query.filter_by(college_name = college_name).all()
+        elif(branch):
+            filtered = User.query.filter_by(branch = branch).all()
+        else:
+            filtered = 0
+
+        posts = AddAcademics.query.filter_by().all()
+        comments = AcademicComments.query.all()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        add_posts = AddAcademicsPost()
+        users = User.query.all()
+
+        # if not current_user.is_authenticated:
+
+        #     flash("Please Login!!", 'danger')
+        #     status = "0"
+        #     return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
+
+        return render_template("filtered.html", users = users, filtered = filtered, posts = posts[::-1], comments = comments, username = user_name, add_project_form = add_posts, status = status)
+
+@app.route("/filterideas", methods = ["GET", "POST"])
+def filterideas():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        branch = request.form["branch"]
+        college_name = request.form["college_name"]
+
+        add_posts = AddIdeasPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        if(branch and college_name):
+            filtered = User.query.filter_by(branch = branch, college_name = college_name).all()
+        elif(college_name):
+            filtered = User.query.filter_by(college_name = college_name).all()
+        elif(branch):
+            filtered = User.query.filter_by(branch = branch).all()
+        else:
+            filtered = 0
+
+        posts = AddIdeas.query.filter_by().all()
+        comments = IdeasComments.query.all()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        add_posts = AddIdeasPost()
+
+        users = User.query.all()
+
+        # if not current_user.is_authenticated:
+
+        #     flash("Please Login!!", 'danger')
+        #     status = "0"
+        #     return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
+
+        return render_template("filtered.html", users = users, filtered = filtered, posts = posts[::-1], comments = comments, username = user_name, add_project_form = add_posts, status = status)
+
 
 @app.route("/collab", methods = ["GET", "POST"])
 def collab():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
 
     if request.method == "POST":
 
@@ -639,6 +785,11 @@ def collab():
 @app.route("/profile", methods = ["GET", "POST"])
 def profile():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     add_posts = AddProjectPost()
 
     userid = current_user.get_id()
@@ -649,12 +800,25 @@ def profile():
     posts = AddProject.query.all()
     comments = ProjectComments.query.all()
 
+    postacademics = AddAcademics.query.all()
+    postacademicscomment = AcademicComments.query.all()
+
+    postideas = AddIdeas.query.all()
+    postideascomments = IdeasComments.query.all()
+
+    users = User.query.all()
+
     collab = Collab.query.all()
 
-    return render_template("profile.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments, collab = collab, myid = userid)
+    return render_template("profile.html", users = users, postacademics = postacademics, postacademicscomment = postacademicscomment, postideas = postideas, postideascomments = postideascomments, username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments, collab = collab, myid = userid)
 
 @app.route("/accept", methods = ["GET", "POST"])
 def accept():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
 
     if request.method == "POST":
 
@@ -670,6 +834,11 @@ def accept():
 @app.route("/reject", methods = ["GET", "POST"])
 def reject():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     if request.method == "POST":
 
         ids = request.form["id"]
@@ -684,6 +853,11 @@ def reject():
 @app.route("/home", methods = ["GET", "POST"])
 def home():
 
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
     add_posts = AddProjectPost()
 
     userid = current_user.get_id()
@@ -697,6 +871,28 @@ def home():
     collab = Collab.query.all()
 
     return render_template("home.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments, collab = collab)
+
+@app.route("/update", methods = ["GET", "POST"])
+def update():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        linkedin = request.form["linkedin"]
+        github = request.form["github"]
+
+        userid = current_user.get_id()
+
+        db.session.query(User).filter(User.id == userid).update({User.linkedin: linkedin, User.github: github}, synchronize_session=False)
+        db.session.commit()
+
+        return redirect(url_for('profile'))
+
+    return "Update Route"
 
 if __name__ == "__main__":
 
