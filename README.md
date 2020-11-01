@@ -1,4 +1,6 @@
 # VHackathon 2020
+
+## Team Name: Error By Night
 ### Platform to connect students and staff on a national level
 
 ## To install dependencies
