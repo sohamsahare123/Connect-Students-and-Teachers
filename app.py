@@ -12,15 +12,13 @@ from mailing import *
 
 app = Flask(__name__)
 
-app.secret_key = "\xce\xd6\xb9\x89\xe4|\x01\xc0\x8e\xf5E\x8f\x94F\xdd\xa3\xe4\x8c^W\xfe\xef\x86Y/\x14\xfe\xf4\x9d\xc6" #os.environ.get('SECRET')
+app.secret_key = os.environ.get('SECRET')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://prajwaldubey@vhackathon:Prajwal@123@vhackathon.postgres.database.azure.com:5432/vhackathon" #os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-"""psql --host=vhackathon.postgres.database.azure.com --port=5432 --username=prajwaldubey@vhackathon --dbname=vhackathon"""
-
-EMAIL_ADDRESS = "soham.sahare@vit.edu.in" #os.environ.get('EMAIL_ADDRESS')
-EMAIL_PASSWORD = "Naz22291" #os.environ.get('EMAIL_PASSWORD')
+EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 db = SQLAlchemy(app)
 
