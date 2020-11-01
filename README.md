@@ -12,9 +12,7 @@ python app.py
 ```
 
 ## Deployed version
-```
 https://v-hackathon.azurewebsites.net
-```
 
 ## Github Link
 
