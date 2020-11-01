@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    {% for filter in filtered %}
+       
+        {% for post in posts %}
+
+            {% if filter.id == post.userid %}
+
+
+                {{ post.id }}
+                {{ post.title }}
+                {{ post.description }}
+                {{ post.link }}
+
+                {{ post.userid }}
+                {{ post.username }}
+
+                <br>
+                <br>
+                <br>
+
+            {% endif %}
+
+        {% endfor %}
+
+        <br>
+    {% endfor %}
+
+</body>
+</html>

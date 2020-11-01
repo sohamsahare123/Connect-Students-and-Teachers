@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/styleI.css">
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleI.css') }}"> -->
+
+    <title>Projects</title>
+</head>
+<body>
+    
+    
+    <div class="hiddenNav">
+      <a href="{{ url_for('home') }}"><p>Home</p></a>
+      <a href="{{ url_for('projects') }}"><p>Projects</p></a>
+      <a href="{{ url_for('academics') }}"><p>Academics</p></a>
+      <a href="{{ url_for('ideas') }}"><p>Ideas</p></a>
+    </div>
+    <nav>
+        <div class="navbar">
+
+            <div class="logo">
+                <a href="{{ url_for('projects') }}"><h5>EBN</h5></a>
+            </div>
+
+            <div class="dropdown">
+
+                <!--Trigger-->
+                <a class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle userIconNav"></i></a>
+              
+              
+                {% if status == "1" %}
+                  <div class="dropdown-menu dropdown-primary">
+                      <a class="dropdown-item" href="#">{{ username }}</a>
+                      <div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Profile</a>
+                      <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                  </div>
+                {% endif %}
+
+            </div>
+
+            {% if status == "0" %}
+              <div class="offline">
+                  <a href="{{ url_for('login') }}">Login</a>
+                  <a href="{{ url_for('signup') }}">Signup</a>
+              </div>
+            {% endif %}
+
+
+            <div class="ham">
+                <div class="hero">
+                    <i class="fas fa-bars fa-lg"></i>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="card mainCard">
+
+        <div class="content">
+            <div class="nav">
+                <div class="links">
+                    <a href="{{ url_for('projects') }}"><h5>EBN</h5></a>
+                    <a href="{{ url_for('home') }}"><p>Home</p></a>
+                    <a href="{{ url_for('projects') }}"><p>Projects</p></a>
+                    <a href="{{ url_for('academics') }}"><p>Academics</p></a>
+                    <a href="{{ url_for('ideas') }}"><p>Ideas</p></a>
+                  </div>
+                
+                <div class="dropdown">
+
+                    <!--Trigger-->
+                    <a class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false"><i class="fas fa-user-circle userIconNav"></i></a>
+                  
+                  
+                      {% if status == "1" %}
+                      <div class="dropdown-menu dropdown-primary">
+                          <a class="dropdown-item" href="#">{{ username }}</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="#">Profile</a>
+                          <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                      </div>
+                    {% endif %}
+                </div>
+
+                {% if status == "0" %}
+                  <div class="offline">
+                      <a href="{{ url_for('login') }}">Login</a>
+                      <a href="{{ url_for('signup') }}">Signup</a>
+                  </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="cards">
+                <div class="card z-depth-2">
+                    
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card z-depth-2">
+                        <h4 class="text-center">Username</h4>
+                        <div class="links row text-center" style="display: flex; justify-content:space-around">
+
+                            <form action="/update">
+                            
+                                <div class="col-sm " style=" margin-top: 5px">
+                                    <a href=""><i class="fab fa-linkedin-in" style="outline:0 !important; border:none;"></i></a>
+                                    <input type="text" value="https://"> 
+                                </div>
+    
+                                <div class="col-sm" style=" margin-top: 5px">
+                                    <a href=""><i class="fab fa-twitter " style="outline:0 !important; border:none; "></i></a> 
+                                    <input type="text" value="dsfins">
+                                </div>
+                                <div class="col-sm" style=" margin-top: 5px">
+                                    <a href=""><i class="fab fa-github" style="outline:0 !important; border:none;"></i></a>
+                                    <input type="text" value="dsfins">
+                                </div>
+                                <input type="submit" class="btn btn-primary" value="Update" style="margin-top: 10px;">
+                            
+                            </form>
+                            
+        
+                        </div>
+                    </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="card z-depth-2">
+                            <h5 class="text-center">Requests</h5>
+                            {% for i in collab %}
+                                {% if i.followed_username == username and i.response == 'R' %}
+                                    <div>
+                                        <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                            <div>
+                                                <h6>{{ i.follower_username }}</h6> 
+                                            </div>
+                                            <div style="display: flex; flex-direction: row;">
+                                                <form action="/accept" method="POST">
+                                                    <input type="text" style="display: none;" value="{{ i.id }}" name="id" id="id">
+                                                    <button class="btn btn-primary btn-sm"><i class="fas fa-check-circle"></i></button>
+                                                </form>
+                                                <form action="/reject" method="POST">
+                                                    <input type="text" style="display: none;" value="{{ i.id }}" name="id" id="id">
+                                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-times-circle"></i></button> 
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <hr>
+
+                            <h5 class="text-center">Accepted</h5>
+                            {% for i in collab %}
+                                {% if i.followed_username == username and i.response == 'A' %}
+                                    <div>
+                                        <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+                                            <div>
+                                                <h6>{{ i.follower_username }}</h6> 
+                                            </div>
+                                            <div style="display: flex; flex-direction: row;">
+                                                <form action="/reject" method="POST">
+                                                    <input type="text" style="display: none;" value="{{ i.id }}" name="id" id="id">
+                                                    <button class="btn btn-secondary btn-sm"><i class="fas fa-times-circle"></i></button> 
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+
+                        </div>
+                      </div>
+
+                    </div>
+                    
+                </div>
+            
+                <div class="container">
+                    <div class="row">
+                      
+                      <div class="col-sm-12">
+                        <div class="card z-depth-2">
+
+                            <h3 class="text-center">My Posts</h3>
+
+
+                                <h4>Projects</h4>
+                            {% for post in posts %}
+                                {% if post.username == username %}
+                                <div class="card z-depth-2">
+                                    <div class="head">
+                                      <div class="title">
+                                        <h1>{{ post.title }}</h1>
+                                        <button
+                                          class="userDetails"
+                                          data-toggle="modal"
+                                          data-target="#profile_{{ post.id }}"
+                                        >
+                                          <p><i class="fas fa-user"></i>&nbsp; {{ post.username }}</p>
+                                        </button>
+                                        <p><i class="fas fa-calendar-alt" style="margin-right: 5px;"></i> {{ post.date_time }}</p>
+                                      </div>
+                                      <!-- Button trigger modal -->
+                        
+                                      <!-- Modal -->
+                                      <div
+                                        class="modal fade"
+                                        id="profile_{{ post.id }}"
+                                        tabindex="-1"
+                                        role="dialog"
+                                        aria-labelledby="exampleModalCenterTitle"
+                                        aria-hidden="true"
+                                      >
+                                        <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="exampleModalLongTitle">
+                                                {{ post.username }}
+                                              </h5>
+                                              <button
+                                                type="button"
+                                                class="close"
+                                                data-dismiss="modal"
+                                                aria-label="Close"
+                                              >
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <p>Contact details</p>
+                                              <div class="links" style="display: flex; justify-content: space-around;">
+                                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
+                                                  <a href=""><i class="fab fa-instagram-square"></i></a>
+                                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
+                                              </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <form action="/collab" method="POST">
+                
+                                                <input type="text" style="display: none;" name="followed_id" id="followed_id" value="{{ post.userid }}">
+                                                
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                                <button type="submit" class="btn btn-secondary">Ask for Collaboration</button>
+                                              </form>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                
+                                      
+                      
+                                    </div>
+                                    <div class="para">
+                                      <p>
+                                       {{ post.description }}
+                                      </p>
+                                    </div>
+                
+                                    <div>
+                                      <a href="{{ post.link }}" target="_blank">Link</a>
+                                    </div>
+                
+                                    <hr />
+                
+                
+                                    <div class="comments" style="display:flex; justify-content: space-between;">
+                                      <div>
+                                        <button data-toggle="modal" data-target="#comments{{ post.id }}" class="btn btn-dark btn-sm"><i class="fas fa-comment"></i> &nbsp; Comments</button>                        
+                                      </div>
+                                      {% if post.username == username %}
+                                        <div class="editDelete">
+                                          <button  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_{{ post.id }}"><i class="fas fa-edit"></i></button>
+                                          <button  class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{ post.id }}"><i class="fas fa-trash-alt"></i></button>
+                                        
+                                          <div class="modal fade" id="edit_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                          aria-hidden="true">
+                          
+                                          <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                          
+                          
+                                              <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title" id="exampleModalLongTitle">Edit</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  <form action="/editpostproject" method="POST">
+                          
+                                                    <div class="md-form">
+                                                        <input type="text" id="form1" name = "title" class="form-control" value="{{ post.title }}">
+                                                        <label for="form1">Title</label>
+                                                      </div>
+                    
+                                                      <div class="md-form">
+                                                        <input type="text" id="form1"  name = "description"  class="form-control" value="{{ post.description }}">
+                                                        <label for="form1">Description</label>
+                                                      </div>
+                                                      
+                                                      <div class="md-form">
+                                                        <input type="text" id="form1" name = "link" class="form-control" value="{{ post.link }}">
+                                                        <label for="form1">Link</label>
+                                                      </div>
+                    
+                                                      <div class="md-form">
+                                                        <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
+                                                  
+                                                      </div>
+                    
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                          
+                                                  </form>
+                                              </div>
+                                              </div>
+                                          </div>
+                                          </div>
+                          
+                          
+                                          <div class="modal fade" id="delete_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                          aria-hidden="true">
+                          
+                                          <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                                          <div class="modal-dialog modal-dialog-centered" role="document">
+                          
+                          
+                                              <div class="modal-content">
+                                              <div class="modal-header">
+                                                  <h5 class="modal-title" id="exampleModalLongTitle">Delete Post</h5>
+                                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                  </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                  Are you sure you want to delete?
+                                              </div>
+                                              <div class="modal-footer">
+                                                  
+                                                  <form action="/deleteproject" method="POST">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                                    <div class="md-form">
+                                                      <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
+                                                
+                                                    </div>
+                                                      
+                                                    <button type="submit" class="btn btn-primary">Yes</button>
+                                                  
+                                                  </form>
+                                              </div>
+                                              </div>
+                                          </div>
+                                          </div>
+                                        
+                                        
+                                        </div>
+                                      
+                                    {% endif %}
+                                      <div
+                                        class="modal fade"
+                                        id="comments{{ post.id }}" 
+                                        tabindex="-1"
+                                        role="dialog"
+                                        aria-labelledby="myModalLabel" 
+                                        aria-hidden="true"
+                                      >
+                                       <!--  ID -->
+                                        <div class="modal-dialog modal-lg" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h4 class="modal-title w-100" id="myModalLabel">
+                                                {{ post.title }}
+                                              </h4>
+                                              <button
+                                                type="button"
+                                                class="close"
+                                                data-dismiss="modal"
+                                                aria-label="Close"
+                                              >
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <p class="modal-body-view">
+                                                {{ post.description }}
+                                              </p>
+                                              <hr />
+                                              <h5 class="h5">Comments</h5>
+                                              <div class="comments-view">
+                
+                                                {% for comment in comments %}
+                                                  {% if comment.projectid ==  post.id %}
+                                                  <p class="note note-primary">
+                                                    <strong>{{ comment.username }} : </strong> {{ comment.comment }}
+                                                  </p>
+                                                  {% endif %}
+                                                {% endfor %}
+                
+                                              </div>
+                
+                                              <div class="comments-view">
+                
+                                                        <form action="/addprojectcomments" method="POST">
+                                                                <input type="text" id="comment" name="comment" class="form-control" >
+                
+                                                                <input style="display: none;" type="text" id="project" name="project" value="{{ post.id }}"> 
+                
+                                                                <button type="submit" class="btn btn-secondary btn-sm"><i class="fas fa-paper-plane"></i> &nbsp; Send</button>
+                                                        </form>
+                                                    
+                                              </div>
+                                              
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <!-- Central Modal Small -->
+                                    </div>
+                                    
+                                  </div>
+                                    {% endif %}
+
+                                  {% endfor %}
+
+                                  <h4>Academics</h4>
+
+                                  
+
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            
+
+            <footer>
+              <div class="copyright">
+                <p>2020 <i class="fa fa-copyright" aria-hidden="true"></i><a href="">Error By Night</a></p>
+              </div>
+              <div class="links">
+                <a href=""> <p>About Us</p></a>
+                <a href=""> <p>Contact</p></a>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+
+    <!-- JQuery -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>    
+
+    <script>
+        const ham = document.querySelector(".ham");
+        const hiddenNav = document.querySelector(".hiddenNav");
+        const userProfile = document.querySelector(".userProfile");
+        const userIcon = document.querySelector(".userIcon");
+        const userIconNav = document.querySelector(".userIconNav");
+
+        ham.addEventListener("click", () => {
+            hiddenNav.classList.toggle("display");
+        });
+
+        userIcon.addEventListener("click", () => {
+            userProfile.classList.toggle("userProfileDisplay");
+        });
+        userIconNav.addEventListener("click", () => {
+            userProfile.classList.toggle("userProfileDisplay");
+        });
+    </script>
+
+</body>
+</html>

@@ -17,12 +17,24 @@ class User(UserMixin, db.Model):
     branch = db.Column(db.String(), nullable = False)
     college_name = db.Column(db.String(), nullable = False)
 
+class Collab(UserMixin, db.Model):
+
+    __tablename__ = "collab"
+
+    '''CREATE TABLE collab (id SERIAL PRIMARY KEY, follower_id INT NOT NULL, follower_username TEXT NOT NULL, followed_id INT NOT NULL, followed_username TEXT NOT NULL,  response TEXT);'''
+    
+    id = db.Column(db.Integer, primary_key = True)
+    follower_id = db.Column(db.Integer, nullable = False)
+    follower_username = db.Column(db.String(), nullable = False)
+    followed_id = db.Column(db.Integer, nullable = False)
+    followed_username = db.Column(db.String(), nullable = False)
+    response = db.Column(db.String(), nullable = False)
 
 class AddProject(UserMixin, db.Model):
 
     __tablename__ = "addproject"
 
-    '''CREATE TABLE addproject (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL, link TEXT NOT NULL, date_time TEXT NOT NULL, userid TEXT NOT NULL, username TEXT NOT NULL);'''
+    '''CREATE TABLE addproject (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL, link TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL);'''
 
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(), nullable = False)
@@ -36,7 +48,7 @@ class ProjectComments(UserMixin, db.Model):
 
     __tablename__ = "projectcomments"
 
-    '''CREATE TABLE projectcomments (id SERIAL PRIMARY KEY, comment TEXT NOT NULL, date_time TEXT NOT NULL, userid TEXT NOT NULL, username TEXT NOT NULL, projectid TEXT NOT NULL);'''
+    '''CREATE TABLE projectcomments (id SERIAL PRIMARY KEY, comment TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL, projectid INT NOT NULL);'''
 
     id = db.Column(db.Integer, primary_key = True)
     comment = db.Column(db.String(), nullable = False)
@@ -45,27 +57,57 @@ class ProjectComments(UserMixin, db.Model):
     username = db.Column(db.String(), nullable = False)
     projectid = db.Column(db.String(), nullable = False)
 
-# class AddAcademics(UserMixin, db.Model):
+class AddAcademics(UserMixin, db.Model):
 
-#     __tablename__ = "addacademics"
+    __tablename__ = "addacademics"
 
-#     '''CREATE TABLE addacademics (academic_id SERIAL PRIMARY KEY, academic_title TEXT NOT NULL, academic_description TEXT NOT NULL, date_time TEXT NOT NULL, link TEXT NOT NULL, userid TEXT NOT NULL);'''
-#     academic_id = db.Column(db.Integer, primary_key = True)
-#     academic_title = db.Column(db.String(), nullable = False)
-#     academic_description = db.Column(db.String(), nullable = False)
-#     date_time = db.Column(db.String(), nullable = False)
-#     link = db.Column(db.String(), nullable = False)
-#     userid = db.Column(db.String(), nullable = False)
+    '''CREATE TABLE addacademics (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL, link TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL);'''
 
-# class ProjectComments(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(), nullable = False)
+    description = db.Column(db.String(), nullable = False)
+    link = db.Column(db.String(), nullable = False)
+    date_time = db.Column(db.String(), nullable = False)
+    userid = db.Column(db.String(), nullable = False)
+    username = db.Column(db.String(), nullable = False)
 
-#     __tablename__ = "projectcomments"
+class AcademicComments(UserMixin, db.Model):
 
-#     '''CREATE TABLE projectcomments (id SERIAL PRIMARY KEY, comment TEXT NOT NULL, date_time TEXT NOT NULL, userid TEXT NOT NULL, username TEXT NOT NULL, projectid TEXT NOT NULL);'''
+    __tablename__ = "academiccomments"
 
-#     id = db.Column(db.Integer, primary_key = True)
-#     comment = db.Column(db.String(), nullable = False)
-#     date_time = db.Column(db.String(), nullable = False)
-#     userid = db.Column(db.String(), nullable = False)
-#     username = db.Column(db.String(), nullable = False)
-#     projectid = db.Column(db.String(), nullable = False)
+    '''CREATE TABLE academiccomments (id SERIAL PRIMARY KEY, comment TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL, projectid INT NOT NULL);'''
+
+    id = db.Column(db.Integer, primary_key = True)
+    comment = db.Column(db.String(), nullable = False)
+    date_time = db.Column(db.String(), nullable = False)
+    userid = db.Column(db.String(), nullable = False)
+    username = db.Column(db.String(), nullable = False)
+    projectid = db.Column(db.String(), nullable = False)
+
+class AddIdeas(UserMixin, db.Model):
+
+    __tablename__ = "addideas"
+
+    '''CREATE TABLE addideas (id SERIAL PRIMARY KEY, title TEXT NOT NULL, description TEXT NOT NULL, link TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL);'''
+
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(), nullable = False)
+    description = db.Column(db.String(), nullable = False)
+    link = db.Column(db.String(), nullable = False)
+    date_time = db.Column(db.String(), nullable = False)
+    userid = db.Column(db.String(), nullable = False)
+    username = db.Column(db.String(), nullable = False)
+
+
+class IdeasComments(UserMixin, db.Model):
+
+    __tablename__ = "ideascomments"
+
+    '''CREATE TABLE ideascomments (id SERIAL PRIMARY KEY, comment TEXT NOT NULL, date_time TEXT NOT NULL, userid INT NOT NULL, username TEXT NOT NULL, projectid INT NOT NULL);'''
+
+    id = db.Column(db.Integer, primary_key = True)
+    comment = db.Column(db.String(), nullable = False)
+    date_time = db.Column(db.String(), nullable = False)
+    userid = db.Column(db.String(), nullable = False)
+    username = db.Column(db.String(), nullable = False)
+    projectid = db.Column(db.String(), nullable = False)

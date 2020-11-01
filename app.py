@@ -29,8 +29,8 @@ login.init_app(app)
 
 @app.errorhandler(404) 
 def not_found(e): 
-  
-    return "404 {}".format("HELLO")
+
+    return "<h1>404 Page not found</h1>"
 
 @login.user_loader
 def load_user(id):
@@ -83,9 +83,51 @@ def login():
         login_user(user_object)
 
         flash("Login Successfull!!", 'success')
-        return redirect(url_for('projects'))
+        return redirect(url_for('home'))
 
     return render_template("login.html", form = login)
+
+
+@app.route("/forgotpassword", methods = ["GET", "POST"])
+def forgotpassword():
+
+    forgot_password = ForgetPassword()
+    login = LogIn()
+
+    if forgot_password.validate_on_submit():
+
+        email = forgot_password.email.data
+        TO = email
+        
+        user_email = User.query.filter_by(email = email).first()
+        if (user_email):
+
+            user = User.query.filter_by(email = email).first()
+
+            username = user.username
+
+            string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+            password = "" 
+            length = len(string) 
+            for i in range(10):  
+                password += string[math.floor(random.random() * length)] 
+
+            hashed_password = pbkdf2_sha256.hash(password)
+
+            db.session.query(User).filter(User.email == email).update({User.password: hashed_password}, synchronize_session=False)
+            db.session.commit()
+
+            send_mail_password_forgot(TO, EMAIL_ADDRESS, EMAIL_PASSWORD, username, password)
+
+            flash("Temporary Password has been sent to your registered email", "success")
+
+            return render_template("login.html", form = login)
+        else:
+            flash("This email is not registered", "danger")
+            return render_template("forgotpassword.html", form = forgot_password)
+
+    return render_template("forgotpassword.html", form = forgot_password)
+
 
 @app.route("/logout", methods = ['GET', 'POST'])
 def logout():
@@ -102,6 +144,10 @@ def logout():
 
     return render_template("login.html", form = login)
 
+##########################################################################################
+
+##### PROJECTS
+
 @app.route("/projects", methods = ['GET', 'POST'])
 #@login_required
 def projects():
@@ -116,15 +162,15 @@ def projects():
     posts = AddProject.query.all()
     comments = ProjectComments.query.all()
 
-    # add_comment = AddProjectComments() ## COMMENT FORM
-
     if not current_user.is_authenticated:
 
         flash("Please Login!!", 'danger')
         status = "0"
-        return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
+        return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
 
-    return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts, comments = comments)
+    return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+##### ADD PROJECTS  
 
 @app.route("/addproject", methods = ["POST"])
 def addproject():
@@ -169,72 +215,9 @@ def addproject():
         posts = AddProject.query.all()
         comments = ProjectComments.query.all()
 
-        return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts, comments = comments)
+        return render_template("projects.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
 
-@app.route("/forgotpassword", methods = ["GET", "POST"])
-def forgotpassword():
-
-    forgot_password = ForgetPassword()
-    login = LogIn()
-
-    if forgot_password.validate_on_submit():
-
-        email = forgot_password.email.data
-        TO = email
-        
-        user_email = User.query.filter_by(email = email).first()
-        if (user_email):
-
-            user = User.query.filter_by(email = email).first()
-
-            username = user.username
-
-            string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            password = "" 
-            length = len(string) 
-            for i in range(10):  
-                password += string[math.floor(random.random() * length)] 
-
-            hashed_password = pbkdf2_sha256.hash(password)
-
-            db.session.query(User).filter(User.email == email).update({User.password: hashed_password}, synchronize_session=False)
-            db.session.commit()
-
-            send_mail_password_forgot(TO, EMAIL_ADDRESS, EMAIL_PASSWORD, username, password)
-
-            flash("Temporary Password has been sent to your registered email", "success")
-
-            return render_template("login.html", form = login)
-        else:
-            flash("This email is not registered", "danger")
-            return render_template("forgotpassword.html", form = forgot_password)
-
-    return render_template("forgotpassword.html", form = forgot_password)
-
-@app.route("/filter", methods = ["GET, POST"])
-def filter():
-
-    return "filter"
-
-@app.route("/academics", methods = ["GET", "POST"])
-def academics():
-    
-    return "academics"
-
-@app.route("/qna", methods = ["GET", "POST"])
-def qna():
-    
-    return "qna"
-
-@app.route("/blog", methods = ["GET", "POST"])
-def blog():
-    
-    return "blog"
-
-@app.route("/ideas", methods = ["GET", "POST"])
-def ideas():
-
-    return "ideas"
+####### ADD PROJECT COMMENTS
 
 @app.route("/addprojectcomments", methods = ["GET", "POST"])
 def addprojectcomments():
@@ -267,6 +250,453 @@ def addprojectcomments():
         return "DONE"
 
     return "addprojectcomments"
+
+########### EDIT PROJECT POST
+
+@app.route("/editpostproject", methods = ["GET", "POST"])
+def editpostproject():
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        description = request.form["description"]
+        link = request.form["link"]
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddProject).filter(AddProject.id == projectid).update({AddProject.title: title, AddProject.description: description, AddProject.link: link}, synchronize_session=False)
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+########### DELETE PROJECTS
+
+@app.route("/deleteproject", methods = ["POST"])
+def deleteproject():
+
+    if request.method == "POST":
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddProject).filter(AddProject.id == projectid).delete()
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+##########################################################################################
+
+##### Academics
+
+@app.route("/academics", methods = ['GET', 'POST'])
+#@login_required
+def academics():
+
+    add_posts = AddAcademicsPost()
+
+    userid = current_user.get_id()
+    user = User.query.filter_by(id = userid).first()
+    user_name = user.username
+    status = "1"
+
+    posts = AddAcademics.query.all()
+    comments = AcademicComments.query.all()
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        status = "0"
+        return render_template("academics.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+    return render_template("academics.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+##### ADD PROJECTS  
+
+@app.route("/addacademic", methods = ["POST"])
+def addacademic():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    add_posts = AddAcademicsPost()
+
+    if add_posts.validate_on_submit():
+
+        title = add_posts.title.data
+        description = add_posts.description.data
+        link = add_posts.link.data
+
+        now = datetime.now()
+
+        date = str(now.strftime("%d/%m/%Y"))
+        time = str(now.strftime("%H:%M"))
+
+        date_time = "{} {}".format(date, time)
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        username = user.username
+
+        post = AddAcademics(title = title, description = description, link = link, date_time = date_time, userid = userid, username = username)
+        db.session.add(post)
+        db.session.commit() 
+
+        # break
+
+        add_posts = AddAcademicsPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        posts = AddAcademics.query.all()
+        comments = AcademicComments.query.all()
+
+        return render_template("academics.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+####### ADD PROJECT COMMENTS
+
+@app.route("/addacademiccomments", methods = ["GET", "POST"])
+def addacademiccomments():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        comment = request.form["comment"]
+        project_id = request.form["project"]
+
+        now = datetime.now()
+
+        date = str(now.strftime("%d/%m/%Y"))
+        time = str(now.strftime("%H:%M"))
+
+        date_time = "{} {}".format(date, time)
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        username = user.username
+
+        comm = AcademicComments(comment = comment, date_time = date_time, userid = userid, username = username, projectid = project_id)
+        db.session.add(comm)
+        db.session.commit() 
+
+        return "DONE"
+
+    return "addprojectcomments"
+
+########### EDIT PROJECT POST
+
+@app.route("/editpostacademic", methods = ["GET", "POST"])
+def editpostacademic():
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        description = request.form["description"]
+        link = request.form["link"]
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddAcademics).filter(AddAcademics.id == projectid).update({AddAcademics.title: title, AddAcademics.description: description, AddAcademics.link: link}, synchronize_session=False)
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+########### DELETE PROJECTS
+
+@app.route("/deleteacademic", methods = ["POST"])
+def deleteacademic():
+
+    if request.method == "POST":
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddAcademics).filter(AddAcademics.id == projectid).delete()
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+
+##########################################################################################
+
+##### IDEAS
+
+@app.route("/ideas", methods = ['GET', 'POST'])
+#@login_required
+def ideas():
+
+    add_posts = AddIdeasPost()
+
+    userid = current_user.get_id()
+    user = User.query.filter_by(id = userid).first()
+    user_name = user.username
+    status = "1"
+
+    posts = AddIdeas.query.all()
+    comments = IdeasComments.query.all()
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        status = "0"
+        return render_template("ideas.html", username = "username", add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+    return render_template("ideas.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+##### ADD Ideas  
+
+@app.route("/addideas", methods = ["POST"])
+def addideas():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    add_posts = AddIdeasPost()
+
+    if add_posts.validate_on_submit():
+
+        title = add_posts.title.data
+        description = add_posts.description.data
+        link = add_posts.link.data
+
+        now = datetime.now()
+
+        date = str(now.strftime("%d/%m/%Y"))
+        time = str(now.strftime("%H:%M"))
+
+        date_time = "{} {}".format(date, time)
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        username = user.username
+
+        post = AddIdeas(title = title, description = description, link = link, date_time = date_time, userid = userid, username = username)
+        db.session.add(post)
+        db.session.commit() 
+
+        # break
+
+        add_posts = AddIdeasPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        posts = AddIdeas.query.all()
+        comments = IdeasComments.query.all()
+
+        return render_template("ideas.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments)
+
+####### ADD PROJECT COMMENTS
+
+@app.route("/addideacomments", methods = ["GET", "POST"])
+def addideacomments():
+
+    if not current_user.is_authenticated:
+
+        flash("Please Login!!", 'danger')
+        return redirect(url_for('login'))
+
+    if request.method == "POST":
+
+        comment = request.form["comment"]
+        project_id = request.form["project"]
+
+        now = datetime.now()
+
+        date = str(now.strftime("%d/%m/%Y"))
+        time = str(now.strftime("%H:%M"))
+
+        date_time = "{} {}".format(date, time)
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        username = user.username
+
+        comm = IdeasComments(comment = comment, date_time = date_time, userid = userid, username = username, projectid = project_id)
+        db.session.add(comm)
+        db.session.commit() 
+
+        return "DONE"
+
+    return "addprojectcomments"
+
+########### EDIT PROJECT POST
+
+@app.route("/editpostidea", methods = ["GET", "POST"])
+def editpostidea():
+
+    if request.method == "POST":
+
+        title = request.form["title"]
+        description = request.form["description"]
+        link = request.form["link"]
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddIdeas).filter(AddIdeas.id == projectid).update({AddIdeas.title: title, AddIdeas.description: description, AddIdeas.link: link}, synchronize_session=False)
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+########### DELETE PROJECTS
+
+@app.route("/deleteidea", methods = ["POST"])
+def deleteidea():
+
+    if request.method == "POST":
+
+        projectid = request.form["projectid"]
+
+        db.session.query(AddIdeas).filter(AddIdeas.id == projectid).delete()
+        db.session.commit()
+
+        return "DONE"
+
+    return "edited"
+
+@app.route("/filter", methods = ["GET", "POST"])
+def filter():
+
+    if request.method == "POST":
+
+        branch = request.form["branch"]
+        college_name = request.form["college_name"]
+
+        add_posts = AddProjectPost()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        if(branch and college_name):
+            filtered = User.query.filter_by(branch = branch, college_name = college_name).all()
+        elif(college_name):
+            filtered = User.query.filter_by(college_name = college_name).all()
+        elif(branch):
+            filtered = User.query.filter_by(branch = branch).all()
+        else:
+            filtered = 0
+
+        posts = AddProject.query.filter_by().all()
+        comments = ProjectComments.query.all()
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        status = "1"
+
+        add_posts = AddProjectPost()
+
+        # if not current_user.is_authenticated:
+
+        #     flash("Please Login!!", 'danger')
+        #     status = "0"
+        #     return render_template("projects.html", username = "username", add_project_form = add_posts, status = status, posts = posts, comments = comments)
+
+        return render_template("filtered.html", filtered = filtered, posts = posts[::-1], comments = comments, username = user_name, add_project_form = add_posts, status = status)
+
+@app.route("/collab", methods = ["GET", "POST"])
+def collab():
+
+    if request.method == "POST":
+
+        followed_id = request.form["followed_id"]
+        followed_username = request.form["followed_username"]
+
+        userid = current_user.get_id()
+        user = User.query.filter_by(id = userid).first()
+        user_name = user.username
+        
+        comm = Collab(follower_id = userid, follower_username = user_name, followed_id = followed_id, followed_username = followed_username, response = "R")
+        db.session.add(comm)
+        db.session.commit() 
+
+        return "Requested"
+
+    return " collab "
+
+@app.route("/profile", methods = ["GET", "POST"])
+def profile():
+
+    add_posts = AddProjectPost()
+
+    userid = current_user.get_id()
+    user = User.query.filter_by(id = userid).first()
+    user_name = user.username
+    status = "1"
+
+    posts = AddProject.query.all()
+    comments = ProjectComments.query.all()
+
+    collab = Collab.query.all()
+
+    return render_template("profile.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments, collab = collab, myid = userid)
+
+@app.route("/accept", methods = ["GET", "POST"])
+def accept():
+
+    if request.method == "POST":
+
+        id = request.form["id"]
+        
+        db.session.query(Collab).filter(Collab.id == id).update({Collab.response: 'A'}, synchronize_session=False)
+        db.session.commit()
+
+        return "ACCEPTED"
+
+    return "Afm"
+
+@app.route("/reject", methods = ["GET", "POST"])
+def reject():
+
+    if request.method == "POST":
+
+        ids = request.form["id"]
+        
+        db.session.query(Collab).filter(Collab.id == ids).delete()
+        db.session.commit()
+
+        return "Delete"
+
+    return "Afm"
+
+@app.route("/home", methods = ["GET", "POST"])
+def home():
+
+    add_posts = AddProjectPost()
+
+    userid = current_user.get_id()
+    user = User.query.filter_by(id = userid).first()
+    user_name = user.username
+    status = "1"
+
+    posts = AddProject.query.all()
+    comments = ProjectComments.query.all()
+
+    collab = Collab.query.all()
+
+    return render_template("home.html", username = user_name, add_project_form = add_posts, status = status, posts = posts[::-1], comments = comments, collab = collab)
 
 if __name__ == "__main__":
 

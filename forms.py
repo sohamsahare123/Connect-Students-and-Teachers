@@ -55,6 +55,7 @@ class LogIn(FlaskForm): # Login
     submit = SubmitField("Submit")
 
 class ForgetPassword(FlaskForm):
+
     email = EmailField("email", validators = [InputRequired("Email Required"), validate_email])
     
     submit = SubmitField("Submit")
@@ -67,9 +68,18 @@ class AddProjectPost(FlaskForm):
 
     submit = SubmitField('Add')
 
-# class AddProjectComments(FlaskForm):
+class AddAcademicsPost(FlaskForm):
 
-#     comment = StringField("comment", validators = [InputRequired("Comment Required")])
-#     project_id = StringField("project_id", validators = [InputRequired("project_id Required")])
+    title = StringField("title", validators = [InputRequired("Title Required")])
+    description = StringField("description", validators = [InputRequired("Description Required")])
+    link = StringField("link", validators = [InputRequired("Link Required")]) 
 
-#     submit = SubmitField('Add')
+    submit = SubmitField('Add')
+
+class AddIdeasPost(FlaskForm):
+
+    title = StringField("title", validators = [InputRequired("Title Required")])
+    description = StringField("description", validators = [InputRequired("Description Required")])
+    link = StringField("link", validators = [InputRequired("Link Required")]) 
+    
+    submit = SubmitField('Add')

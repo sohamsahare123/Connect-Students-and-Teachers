@@ -15,15 +15,17 @@
     <!-- <link rel="stylesheet" href="styleI.css"> -->
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styleI.css') }}">
 
-    <title>Academics</title>
+    <title>Projects</title>
 </head>
 <body>
     
+    
     <div class="hiddenNav">
-      <a href="{{ url_for('home') }}"><p>Home</p></a>
       <a href="{{ url_for('projects') }}"><p>Projects</p></a>
       <a href="{{ url_for('academics') }}"><p>Academics</p></a>
       <a href="{{ url_for('ideas') }}"><p>Ideas</p></a>
+      <a href="{{ url_for('blog') }}"><p>Blog</p></a>
+      <a href="{{ url_for('qna') }}"><p>QnA</p></a>
     </div>
     <nav>
         <div class="navbar">
@@ -43,7 +45,7 @@
                   <div class="dropdown-menu dropdown-primary">
                       <a class="dropdown-item" href="#">{{ username }}</a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
+                      <a class="dropdown-item" href="#">Profile</a>
                       <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                   </div>
                 {% endif %}
@@ -71,12 +73,13 @@
 
         <div class="content">
             <div class="nav">
-                <div class="links" id="links">
-                    <a href="{{ url_for('home') }}"><h5>EBN</h5></a>
-                    <a href="{{ url_for('home') }}"><p>Home</p></a>
+                <div class="links">
+                    <a href="{{ url_for('projects') }}"><h5>EBN</h5></a>
                     <a href="{{ url_for('projects') }}"><p>Projects</p></a>
                     <a href="{{ url_for('academics') }}"><p>Academics</p></a>
                     <a href="{{ url_for('ideas') }}"><p>Ideas</p></a>
+                    <a href="{{ url_for('blog') }}"><p>Blog</p></a>
+                    <a href="{{ url_for('qna') }}"><p>QnA</p></a>
                   </div>
                 
                 <div class="dropdown">
@@ -90,7 +93,7 @@
                       <div class="dropdown-menu dropdown-primary">
                           <a class="dropdown-item" href="#">{{ username }}</a>
                           <div class="dropdown-divider"></div>
-                          <a class="dropdown-item" href="{{ url_for('profile') }}">Profile</a>
+                          <a class="dropdown-item" href="#">Profile</a>
                           <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
                       </div>
                     {% endif %}
@@ -155,8 +158,6 @@
                     </div>
                   </div>
 
-
-
                <br>
 
                <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -177,7 +178,7 @@
 
                             <div class="md-form">
 
-                                <form action="/addacademic" method="POST">
+                                <form action="/addproject" method="POST">
 
                                     <div class="md-form">
                                       {{ add_project_form.title(class = 'form-control', 
@@ -227,7 +228,11 @@
 
                 <!-- CARD  -->
 
-                {% for post in posts %}
+                {% for filter in filtered %}
+
+                    {% for post in posts %}
+
+                        {% if filter.id == post.userid %}
   
                 <div class="card z-depth-2">
                     <div class="head">
@@ -269,29 +274,108 @@
                                 <span aria-hidden="true">&times;</span>
                               </button>
                             </div>
-                            <div class="modal-body">
-                              <p>Contact details</p>
-                              <div class="links" style="display: flex; justify-content: space-around;">
-                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
-                                  <a href=""><i class="fab fa-instagram-square"></i></a>
-                                  <a href=""><i class="fab fa-linkedin-in"></i></a>
-                              </div>
-                            </div>
+                            <div class="modal-body">Contact details</div>
                             <div class="modal-footer">
-                              <form action="/collab" method="POST">
-
-                                <input type="text" style="display: none;" name="followed_id" id="followed_id" value="{{ post.userid }}">
-                                <input type="text" style="display: none;" name="followed_username" id="followed_username" value="{{ post.username }}">
-                                
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
-                                <button type="submit" class="btn btn-secondary">Ask for Collaboration</button>
-                              </form>
+                              <button
+                                type="button"
+                                class="btn btn-light"
+                                data-dismiss="modal"
+                              >
+                                OK
+                              </button>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      
+                      {% if post.username == username %}
+                        <div class="editDelete">
+                          <button  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_{{ post.id }}"><i class="fas fa-edit"></i></button>
+                          <button  class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{ post.id }}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+      
+                      <div class="modal fade" id="edit_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true">
+      
+                      <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+      
+      
+                          <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Edit</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <form action="/editpostproject" method="POST">
+      
+                                <div class="md-form">
+                                    <input type="text" id="form1" name = "title" class="form-control" value="{{ post.title }}">
+                                    <label for="form1">Title</label>
+                                  </div>
+
+                                  <div class="md-form">
+                                    <input type="text" id="form1"  name = "description"  class="form-control" value="{{ post.description }}">
+                                    <label for="form1">Description</label>
+                                  </div>
+                                  
+                                  <div class="md-form">
+                                    <input type="text" id="form1" name = "link" class="form-control" value="{{ post.link }}">
+                                    <label for="form1">Link</label>
+                                  </div>
+
+                                  <div class="md-form">
+                                    <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
+                              
+                                  </div>
+
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary">Save changes</button>
+      
+                              </form>
+                          </div>
+                          </div>
+                      </div>
+                      </div>
+      
+      
+                      <div class="modal fade" id="delete_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true">
+      
+                      <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+      
+      
+                          <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Delete Post</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              Are you sure you want to delete?
+                          </div>
+                          <div class="modal-footer">
+                              
+                              <form action="/deleteproject" method="POST">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <div class="md-form">
+                                  <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
+                            
+                                </div>
+                                  
+                                <button type="submit" class="btn btn-primary">Yes</button>
+                              
+                              </form>
+                          </div>
+                          </div>
+                      </div>
+                      </div>
+                    {% endif %}
+      
       
                     </div>
                     <div class="para">
@@ -307,100 +391,14 @@
                     <hr />
 
 
-                    <div class="comments" style="display:flex; justify-content: space-between;">
+                    <div class="comments">
                       <div>
-                        <button data-toggle="modal" data-target="#comments{{ post.id }}" class="btn btn-dark btn-sm"><i class="fas fa-comment"></i> &nbsp; Comments</button>                        
+                        <button data-toggle="modal" data-target="#comments{{ post.id }}" class="btn btn-dark btn-sm"><i class="fas fa-comment"></i> &nbsp; Comments</button>
+                        
                       </div>
-                      {% if post.username == username %}
-                        <div class="editDelete">
-                          <button  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#edit_{{ post.id }}"><i class="fas fa-edit"></i></button>
-                          <button  class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_{{ post.id }}"><i class="fas fa-trash-alt"></i></button>
-                        
-                          <div class="modal fade" id="edit_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-                          aria-hidden="true">
-          
-                          <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-                          <div class="modal-dialog modal-dialog-centered" role="document">
-          
-          
-                              <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLongTitle">Edit</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                  </button>
-                              </div>
-                              <div class="modal-body">
-                                  <form action="/editpostacademic" method="POST">
-          
-                                    <div class="md-form">
-                                        <input type="text" id="form1" name = "title" class="form-control" value="{{ post.title }}">
-                                        <label for="form1">Title</label>
-                                      </div>
-    
-                                      <div class="md-form">
-                                        <input type="text" id="form1"  name = "description"  class="form-control" value="{{ post.description }}">
-                                        <label for="form1">Description</label>
-                                      </div>
-                                      
-                                      <div class="md-form">
-                                        <input type="text" id="form1" name = "link" class="form-control" value="{{ post.link }}">
-                                        <label for="form1">Link</label>
-                                      </div>
-    
-                                      <div class="md-form">
-                                        <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
-                                  
-                                      </div>
-    
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <button type="submit" class="btn btn-primary">Save changes</button>
-          
-                                  </form>
-                              </div>
-                              </div>
-                          </div>
-                          </div>
-          
-          
-                          <div class="modal fade" id="delete_{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-                          aria-hidden="true">
-          
-                          <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
-                          <div class="modal-dialog modal-dialog-centered" role="document">
-          
-          
-                              <div class="modal-content">
-                              <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLongTitle">Delete Post</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                  </button>
-                              </div>
-                              <div class="modal-body">
-                                  Are you sure you want to delete?
-                              </div>
-                              <div class="modal-footer">
-                                  
-                                  <form action="/deleteacademic" method="POST">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                    <div class="md-form">
-                                      <input type="text" id="form1" style="display: none;" name = "projectid" class="form-control" value="{{ post.id }}">
-                                
-                                    </div>
-                                      
-                                    <button type="submit" class="btn btn-primary">Yes</button>
-                                  
-                                  </form>
-                              </div>
-                              </div>
-                          </div>
-                          </div>
-                        
-                        
-                        </div>
-                      
-                    {% endif %}
+                      <div class="view">
+        
+                      </div>
                       <div
                         class="modal fade"
                         id="comments{{ post.id }}" 
@@ -445,7 +443,7 @@
 
                               <div class="comments-view">
 
-                                        <form action="/addacademiccomments" method="POST">
+                                        <form action="/addprojectcomments" method="POST">
                                                 <input type="text" id="comment" name="comment" class="form-control" >
 
                                                 <input style="display: none;" type="text" id="project" name="project" value="{{ post.id }}"> 
@@ -466,6 +464,9 @@
                     </div>
                     
                   </div>
+                        {% endif %}
+
+                    {% endfor %}
                   
                   {% endfor %}
                   
@@ -511,15 +512,6 @@
         userIconNav.addEventListener("click", () => {
             userProfile.classList.toggle("userProfileDisplay");
         });
-        const header = document.getElementById("links");
-        const btns = header.getElementsByClassName("btnn");
-        for (var i = 0; i < btns.length; i++) {
-          btns[i].addEventListener("click", function() {
-          var current = document.getElementsByClassName("active");
-          current[0].className = current[0].className.replace(" active", "");
-          this.className += " active";
-          });
-        }
     </script>
 
 </body>
