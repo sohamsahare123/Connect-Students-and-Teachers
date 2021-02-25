@@ -12,13 +12,12 @@ from mailing import *
 
 app = Flask(__name__)
 
-app.secret_key = os.environ.get('SECRET')
-
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.secret_key = "this is very secret"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://drsvhrmsmgwbku:3cbf4331d87adb62ded26caed34328f7e080fc10c3473daea9040e42ae8a23b2@ec2-52-204-141-94.compute-1.amazonaws.com:5432/dfe803ekgslsv6"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-EMAIL_ADDRESS = os.environ.get('EMAIL_ADDRESS')
-EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+EMAIL_ADDRESS = ""
+EMAIL_PASSWORD = ""
 
 db = SQLAlchemy(app)
 
